@@ -1,0 +1,9 @@
+import 'package:flutter/material.dart';
+
+class SetupScreen extends StatelessWidget {
+  const SetupScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) =>
+      const Center(child: Text('Setup: scenarios, player count, timers'));
+}
