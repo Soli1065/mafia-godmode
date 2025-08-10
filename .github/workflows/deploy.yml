@@ -16,6 +16,8 @@ jobs:
           flutter-version: 3.24.5
       - name: Flutter pub get
         run: flutter pub get
+      - name: Generate code (Freezed/json)
+        run: dart run build_runner build -d
       - name: Analyze & Test
         run: |
           flutter analyze --no-fatal-infos --no-fatal-warnings
