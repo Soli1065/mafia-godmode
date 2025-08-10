@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class ShellScreen extends StatelessWidget {
-  const ShellScreen({super.key, required this.child});
+  const ShellScreen({required this.child, super.key});
   final Widget child;
 
   @override
@@ -20,21 +20,11 @@ class ShellScreen extends StatelessWidget {
         ],
         onDestinationSelected: (i) {
           switch (i) {
-            case 0:
-              context.go('/');
-              break;
-            case 1:
-              context.go('/catalog');
-              break;
-            case 2:
-              context.go('/assignment');
-              break;
-            case 3:
-              context.go('/gm');
-              break;
-            case 4:
-              context.go('/summary');
-              break;
+            case 0: context.go('/'); return;
+            case 1: context.go('/catalog'); return;
+            case 2: context.go('/assignment'); return;
+            case 3: context.go('/gm'); return;
+            case 4: context.go('/summary'); return;
           }
         },
         selectedIndex: switch (GoRouterState.of(context).fullPath) {
