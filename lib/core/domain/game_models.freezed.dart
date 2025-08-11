@@ -370,7 +370,7 @@ GameEvent _$GameEventFromJson(Map<String, dynamic> json) {
 mixin _$GameEvent {
   DateTime get at => throw _privateConstructorUsedError;
   String get type =>
-      throw _privateConstructorUsedError; // e.g., 'night_kill', 'nominate', 'vote', 'exec', 'phase'
+      throw _privateConstructorUsedError; // e.g., 'night_kill', 'protect', 'investigate', 'vote', 'exec', 'phase'
   String get text => throw _privateConstructorUsedError;
 
   /// Serializes this GameEvent to a JSON map.
@@ -485,7 +485,7 @@ class _$GameEventImpl implements _GameEvent {
   final DateTime at;
   @override
   final String type;
-// e.g., 'night_kill', 'nominate', 'vote', 'exec', 'phase'
+// e.g., 'night_kill', 'protect', 'investigate', 'vote', 'exec', 'phase'
   @override
   final String text;
 
@@ -536,7 +536,8 @@ abstract class _GameEvent implements GameEvent {
   @override
   DateTime get at;
   @override
-  String get type; // e.g., 'night_kill', 'nominate', 'vote', 'exec', 'phase'
+  String
+      get type; // e.g., 'night_kill', 'protect', 'investigate', 'vote', 'exec', 'phase'
   @override
   String get text;
 
@@ -559,8 +560,16 @@ mixin _$GameState {
   int get cycle => throw _privateConstructorUsedError;
   int get secondsLeft => throw _privateConstructorUsedError;
   List<String> get nominations => throw _privateConstructorUsedError;
-  List<VoteEntry> get votes => throw _privateConstructorUsedError;
-  String? get pendingNightKill => throw _privateConstructorUsedError;
+  List<VoteEntry> get votes =>
+      throw _privateConstructorUsedError; // Night selections (MVP)
+  String? get pendingNightKill =>
+      throw _privateConstructorUsedError; // Mafia target (name)
+  String? get doctorProtect =>
+      throw _privateConstructorUsedError; // Doctor protection target (name)
+  String? get detectiveTarget =>
+      throw _privateConstructorUsedError; // Detective investigation target (name)
+  String? get lastInvestigationResult =>
+      throw _privateConstructorUsedError; // Cached result string for quick reference
   bool get revealOnDeath => throw _privateConstructorUsedError;
   bool get isRunning => throw _privateConstructorUsedError;
   String? get winnerFaction => throw _privateConstructorUsedError;
@@ -589,6 +598,9 @@ abstract class $GameStateCopyWith<$Res> {
       List<String> nominations,
       List<VoteEntry> votes,
       String? pendingNightKill,
+      String? doctorProtect,
+      String? detectiveTarget,
+      String? lastInvestigationResult,
       bool revealOnDeath,
       bool isRunning,
       String? winnerFaction,
@@ -617,6 +629,9 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
     Object? nominations = null,
     Object? votes = null,
     Object? pendingNightKill = freezed,
+    Object? doctorProtect = freezed,
+    Object? detectiveTarget = freezed,
+    Object? lastInvestigationResult = freezed,
     Object? revealOnDeath = null,
     Object? isRunning = null,
     Object? winnerFaction = freezed,
@@ -650,6 +665,18 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
       pendingNightKill: freezed == pendingNightKill
           ? _value.pendingNightKill
           : pendingNightKill // ignore: cast_nullable_to_non_nullable
+              as String?,
+      doctorProtect: freezed == doctorProtect
+          ? _value.doctorProtect
+          : doctorProtect // ignore: cast_nullable_to_non_nullable
+              as String?,
+      detectiveTarget: freezed == detectiveTarget
+          ? _value.detectiveTarget
+          : detectiveTarget // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastInvestigationResult: freezed == lastInvestigationResult
+          ? _value.lastInvestigationResult
+          : lastInvestigationResult // ignore: cast_nullable_to_non_nullable
               as String?,
       revealOnDeath: null == revealOnDeath
           ? _value.revealOnDeath
@@ -687,6 +714,9 @@ abstract class _$$GameStateImplCopyWith<$Res>
       List<String> nominations,
       List<VoteEntry> votes,
       String? pendingNightKill,
+      String? doctorProtect,
+      String? detectiveTarget,
+      String? lastInvestigationResult,
       bool revealOnDeath,
       bool isRunning,
       String? winnerFaction,
@@ -713,6 +743,9 @@ class __$$GameStateImplCopyWithImpl<$Res>
     Object? nominations = null,
     Object? votes = null,
     Object? pendingNightKill = freezed,
+    Object? doctorProtect = freezed,
+    Object? detectiveTarget = freezed,
+    Object? lastInvestigationResult = freezed,
     Object? revealOnDeath = null,
     Object? isRunning = null,
     Object? winnerFaction = freezed,
@@ -747,6 +780,18 @@ class __$$GameStateImplCopyWithImpl<$Res>
           ? _value.pendingNightKill
           : pendingNightKill // ignore: cast_nullable_to_non_nullable
               as String?,
+      doctorProtect: freezed == doctorProtect
+          ? _value.doctorProtect
+          : doctorProtect // ignore: cast_nullable_to_non_nullable
+              as String?,
+      detectiveTarget: freezed == detectiveTarget
+          ? _value.detectiveTarget
+          : detectiveTarget // ignore: cast_nullable_to_non_nullable
+              as String?,
+      lastInvestigationResult: freezed == lastInvestigationResult
+          ? _value.lastInvestigationResult
+          : lastInvestigationResult // ignore: cast_nullable_to_non_nullable
+              as String?,
       revealOnDeath: null == revealOnDeath
           ? _value.revealOnDeath
           : revealOnDeath // ignore: cast_nullable_to_non_nullable
@@ -778,6 +823,9 @@ class _$GameStateImpl implements _GameState {
       final List<String> nominations = const <String>[],
       final List<VoteEntry> votes = const <VoteEntry>[],
       this.pendingNightKill,
+      this.doctorProtect,
+      this.detectiveTarget,
+      this.lastInvestigationResult,
       this.revealOnDeath = false,
       this.isRunning = false,
       this.winnerFaction,
@@ -826,8 +874,19 @@ class _$GameStateImpl implements _GameState {
     return EqualUnmodifiableListView(_votes);
   }
 
+// Night selections (MVP)
   @override
   final String? pendingNightKill;
+// Mafia target (name)
+  @override
+  final String? doctorProtect;
+// Doctor protection target (name)
+  @override
+  final String? detectiveTarget;
+// Detective investigation target (name)
+  @override
+  final String? lastInvestigationResult;
+// Cached result string for quick reference
   @override
   @JsonKey()
   final bool revealOnDeath;
@@ -847,7 +906,7 @@ class _$GameStateImpl implements _GameState {
 
   @override
   String toString() {
-    return 'GameState(players: $players, phase: $phase, cycle: $cycle, secondsLeft: $secondsLeft, nominations: $nominations, votes: $votes, pendingNightKill: $pendingNightKill, revealOnDeath: $revealOnDeath, isRunning: $isRunning, winnerFaction: $winnerFaction, log: $log)';
+    return 'GameState(players: $players, phase: $phase, cycle: $cycle, secondsLeft: $secondsLeft, nominations: $nominations, votes: $votes, pendingNightKill: $pendingNightKill, doctorProtect: $doctorProtect, detectiveTarget: $detectiveTarget, lastInvestigationResult: $lastInvestigationResult, revealOnDeath: $revealOnDeath, isRunning: $isRunning, winnerFaction: $winnerFaction, log: $log)';
   }
 
   @override
@@ -865,6 +924,13 @@ class _$GameStateImpl implements _GameState {
             const DeepCollectionEquality().equals(other._votes, _votes) &&
             (identical(other.pendingNightKill, pendingNightKill) ||
                 other.pendingNightKill == pendingNightKill) &&
+            (identical(other.doctorProtect, doctorProtect) ||
+                other.doctorProtect == doctorProtect) &&
+            (identical(other.detectiveTarget, detectiveTarget) ||
+                other.detectiveTarget == detectiveTarget) &&
+            (identical(
+                    other.lastInvestigationResult, lastInvestigationResult) ||
+                other.lastInvestigationResult == lastInvestigationResult) &&
             (identical(other.revealOnDeath, revealOnDeath) ||
                 other.revealOnDeath == revealOnDeath) &&
             (identical(other.isRunning, isRunning) ||
@@ -885,6 +951,9 @@ class _$GameStateImpl implements _GameState {
       const DeepCollectionEquality().hash(_nominations),
       const DeepCollectionEquality().hash(_votes),
       pendingNightKill,
+      doctorProtect,
+      detectiveTarget,
+      lastInvestigationResult,
       revealOnDeath,
       isRunning,
       winnerFaction,
@@ -915,6 +984,9 @@ abstract class _GameState implements GameState {
       final List<String> nominations,
       final List<VoteEntry> votes,
       final String? pendingNightKill,
+      final String? doctorProtect,
+      final String? detectiveTarget,
+      final String? lastInvestigationResult,
       final bool revealOnDeath,
       final bool isRunning,
       final String? winnerFaction,
@@ -934,9 +1006,16 @@ abstract class _GameState implements GameState {
   @override
   List<String> get nominations;
   @override
-  List<VoteEntry> get votes;
+  List<VoteEntry> get votes; // Night selections (MVP)
   @override
-  String? get pendingNightKill;
+  String? get pendingNightKill; // Mafia target (name)
+  @override
+  String? get doctorProtect; // Doctor protection target (name)
+  @override
+  String? get detectiveTarget; // Detective investigation target (name)
+  @override
+  String?
+      get lastInvestigationResult; // Cached result string for quick reference
   @override
   bool get revealOnDeath;
   @override

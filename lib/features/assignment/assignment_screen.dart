@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mafia_godmode/core/application/assignment_providers.dart';
+import 'package:mafia_godmode/core/application/assignment_provider.dart';
 
 class AssignmentScreen extends ConsumerWidget {
   const AssignmentScreen({super.key});

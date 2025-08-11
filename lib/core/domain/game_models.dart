@@ -29,7 +29,7 @@ class VoteEntry with _$VoteEntry {
 class GameEvent with _$GameEvent {
   const factory GameEvent({
     required DateTime at,
-    required String type,   // e.g., 'night_kill', 'nominate', 'vote', 'exec', 'phase'
+    required String type,   // e.g., 'night_kill', 'protect', 'investigate', 'vote', 'exec', 'phase'
     required String text,   // human-readable
   }) = _GameEvent;
 
@@ -45,11 +45,16 @@ class GameState with _$GameState {
     @Default(120) int secondsLeft,
     @Default(<String>[]) List<String> nominations,
     @Default(<VoteEntry>[]) List<VoteEntry> votes,
-    String? pendingNightKill,
+    // Night selections (MVP)
+    String? pendingNightKill,        // Mafia target (name)
+    String? doctorProtect,           // Doctor protection target (name)
+    String? detectiveTarget,         // Detective investigation target (name)
+    String? lastInvestigationResult, // Cached result string for quick reference
+
     @Default(false) bool revealOnDeath,
     @Default(false) bool isRunning,
     String? winnerFaction,
-    @Default(<GameEvent>[]) List<GameEvent> log,   // NEW: timeline log
+    @Default(<GameEvent>[]) List<GameEvent> log,
   }) = _GameState;
 
   factory GameState.fromJson(Map<String, dynamic> json) => _$GameStateFromJson(json);
