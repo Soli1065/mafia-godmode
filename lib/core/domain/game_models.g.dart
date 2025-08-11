@@ -31,6 +31,20 @@ Map<String, dynamic> _$$VoteEntryImplToJson(_$VoteEntryImpl instance) =>
       'target': instance.target,
     };
 
+_$GameEventImpl _$$GameEventImplFromJson(Map<String, dynamic> json) =>
+    _$GameEventImpl(
+      at: DateTime.parse(json['at'] as String),
+      type: json['type'] as String,
+      text: json['text'] as String,
+    );
+
+Map<String, dynamic> _$$GameEventImplToJson(_$GameEventImpl instance) =>
+    <String, dynamic>{
+      'at': instance.at.toIso8601String(),
+      'type': instance.type,
+      'text': instance.text,
+    };
+
 _$GameStateImpl _$$GameStateImplFromJson(Map<String, dynamic> json) =>
     _$GameStateImpl(
       players: (json['players'] as List<dynamic>?)
@@ -53,6 +67,10 @@ _$GameStateImpl _$$GameStateImplFromJson(Map<String, dynamic> json) =>
       revealOnDeath: json['revealOnDeath'] as bool? ?? false,
       isRunning: json['isRunning'] as bool? ?? false,
       winnerFaction: json['winnerFaction'] as String?,
+      log: (json['log'] as List<dynamic>?)
+              ?.map((e) => GameEvent.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const <GameEvent>[],
     );
 
 Map<String, dynamic> _$$GameStateImplToJson(_$GameStateImpl instance) =>
@@ -67,6 +85,7 @@ Map<String, dynamic> _$$GameStateImplToJson(_$GameStateImpl instance) =>
       'revealOnDeath': instance.revealOnDeath,
       'isRunning': instance.isRunning,
       'winnerFaction': instance.winnerFaction,
+      'log': instance.log,
     };
 
 const _$PhaseTypeEnumMap = {

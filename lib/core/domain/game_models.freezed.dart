@@ -21,8 +21,7 @@ Player _$PlayerFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Player {
   String get name => throw _privateConstructorUsedError;
-  String get roleId =>
-      throw _privateConstructorUsedError; // secret to players; visible to GM
+  String get roleId => throw _privateConstructorUsedError;
   bool get alive => throw _privateConstructorUsedError;
 
   /// Serializes this Player to a JSON map.
@@ -135,7 +134,6 @@ class _$PlayerImpl implements _Player {
   final String name;
   @override
   final String roleId;
-// secret to players; visible to GM
   @override
   @JsonKey()
   final bool alive;
@@ -186,7 +184,7 @@ abstract class _Player implements Player {
   @override
   String get name;
   @override
-  String get roleId; // secret to players; visible to GM
+  String get roleId;
   @override
   bool get alive;
 
@@ -204,7 +202,7 @@ VoteEntry _$VoteEntryFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$VoteEntry {
-  String get voter => throw _privateConstructorUsedError; // player name
+  String get voter => throw _privateConstructorUsedError;
   String get target => throw _privateConstructorUsedError;
 
   /// Serializes this VoteEntry to a JSON map.
@@ -306,7 +304,6 @@ class _$VoteEntryImpl implements _VoteEntry {
 
   @override
   final String voter;
-// player name
   @override
   final String target;
 
@@ -353,7 +350,7 @@ abstract class _VoteEntry implements VoteEntry {
       _$VoteEntryImpl.fromJson;
 
   @override
-  String get voter; // player name
+  String get voter;
   @override
   String get target;
 
@@ -362,6 +359,192 @@ abstract class _VoteEntry implements VoteEntry {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$VoteEntryImplCopyWith<_$VoteEntryImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+GameEvent _$GameEventFromJson(Map<String, dynamic> json) {
+  return _GameEvent.fromJson(json);
+}
+
+/// @nodoc
+mixin _$GameEvent {
+  DateTime get at => throw _privateConstructorUsedError;
+  String get type =>
+      throw _privateConstructorUsedError; // e.g., 'night_kill', 'nominate', 'vote', 'exec', 'phase'
+  String get text => throw _privateConstructorUsedError;
+
+  /// Serializes this GameEvent to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of GameEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $GameEventCopyWith<GameEvent> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $GameEventCopyWith<$Res> {
+  factory $GameEventCopyWith(GameEvent value, $Res Function(GameEvent) then) =
+      _$GameEventCopyWithImpl<$Res, GameEvent>;
+  @useResult
+  $Res call({DateTime at, String type, String text});
+}
+
+/// @nodoc
+class _$GameEventCopyWithImpl<$Res, $Val extends GameEvent>
+    implements $GameEventCopyWith<$Res> {
+  _$GameEventCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of GameEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? at = null,
+    Object? type = null,
+    Object? text = null,
+  }) {
+    return _then(_value.copyWith(
+      at: null == at
+          ? _value.at
+          : at // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      text: null == text
+          ? _value.text
+          : text // ignore: cast_nullable_to_non_nullable
+              as String,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$GameEventImplCopyWith<$Res>
+    implements $GameEventCopyWith<$Res> {
+  factory _$$GameEventImplCopyWith(
+          _$GameEventImpl value, $Res Function(_$GameEventImpl) then) =
+      __$$GameEventImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({DateTime at, String type, String text});
+}
+
+/// @nodoc
+class __$$GameEventImplCopyWithImpl<$Res>
+    extends _$GameEventCopyWithImpl<$Res, _$GameEventImpl>
+    implements _$$GameEventImplCopyWith<$Res> {
+  __$$GameEventImplCopyWithImpl(
+      _$GameEventImpl _value, $Res Function(_$GameEventImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of GameEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? at = null,
+    Object? type = null,
+    Object? text = null,
+  }) {
+    return _then(_$GameEventImpl(
+      at: null == at
+          ? _value.at
+          : at // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      text: null == text
+          ? _value.text
+          : text // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$GameEventImpl implements _GameEvent {
+  const _$GameEventImpl(
+      {required this.at, required this.type, required this.text});
+
+  factory _$GameEventImpl.fromJson(Map<String, dynamic> json) =>
+      _$$GameEventImplFromJson(json);
+
+  @override
+  final DateTime at;
+  @override
+  final String type;
+// e.g., 'night_kill', 'nominate', 'vote', 'exec', 'phase'
+  @override
+  final String text;
+
+  @override
+  String toString() {
+    return 'GameEvent(at: $at, type: $type, text: $text)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GameEventImpl &&
+            (identical(other.at, at) || other.at == at) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.text, text) || other.text == text));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, at, type, text);
+
+  /// Create a copy of GameEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$GameEventImplCopyWith<_$GameEventImpl> get copyWith =>
+      __$$GameEventImplCopyWithImpl<_$GameEventImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$GameEventImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _GameEvent implements GameEvent {
+  const factory _GameEvent(
+      {required final DateTime at,
+      required final String type,
+      required final String text}) = _$GameEventImpl;
+
+  factory _GameEvent.fromJson(Map<String, dynamic> json) =
+      _$GameEventImpl.fromJson;
+
+  @override
+  DateTime get at;
+  @override
+  String get type; // e.g., 'night_kill', 'nominate', 'vote', 'exec', 'phase'
+  @override
+  String get text;
+
+  /// Create a copy of GameEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$GameEventImplCopyWith<_$GameEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -374,15 +557,14 @@ mixin _$GameState {
   List<Player> get players => throw _privateConstructorUsedError;
   PhaseType get phase => throw _privateConstructorUsedError;
   int get cycle => throw _privateConstructorUsedError;
-  int get secondsLeft =>
-      throw _privateConstructorUsedError; // timer for current phase
-  List<String> get nominations => throw _privateConstructorUsedError; // names
+  int get secondsLeft => throw _privateConstructorUsedError;
+  List<String> get nominations => throw _privateConstructorUsedError;
   List<VoteEntry> get votes => throw _privateConstructorUsedError;
-  String? get pendingNightKill =>
-      throw _privateConstructorUsedError; // selected target name
+  String? get pendingNightKill => throw _privateConstructorUsedError;
   bool get revealOnDeath => throw _privateConstructorUsedError;
-  bool get isRunning => throw _privateConstructorUsedError; // timer running
+  bool get isRunning => throw _privateConstructorUsedError;
   String? get winnerFaction => throw _privateConstructorUsedError;
+  List<GameEvent> get log => throw _privateConstructorUsedError;
 
   /// Serializes this GameState to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -409,7 +591,8 @@ abstract class $GameStateCopyWith<$Res> {
       String? pendingNightKill,
       bool revealOnDeath,
       bool isRunning,
-      String? winnerFaction});
+      String? winnerFaction,
+      List<GameEvent> log});
 }
 
 /// @nodoc
@@ -437,6 +620,7 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
     Object? revealOnDeath = null,
     Object? isRunning = null,
     Object? winnerFaction = freezed,
+    Object? log = null,
   }) {
     return _then(_value.copyWith(
       players: null == players
@@ -479,6 +663,10 @@ class _$GameStateCopyWithImpl<$Res, $Val extends GameState>
           ? _value.winnerFaction
           : winnerFaction // ignore: cast_nullable_to_non_nullable
               as String?,
+      log: null == log
+          ? _value.log
+          : log // ignore: cast_nullable_to_non_nullable
+              as List<GameEvent>,
     ) as $Val);
   }
 }
@@ -501,7 +689,8 @@ abstract class _$$GameStateImplCopyWith<$Res>
       String? pendingNightKill,
       bool revealOnDeath,
       bool isRunning,
-      String? winnerFaction});
+      String? winnerFaction,
+      List<GameEvent> log});
 }
 
 /// @nodoc
@@ -527,6 +716,7 @@ class __$$GameStateImplCopyWithImpl<$Res>
     Object? revealOnDeath = null,
     Object? isRunning = null,
     Object? winnerFaction = freezed,
+    Object? log = null,
   }) {
     return _then(_$GameStateImpl(
       players: null == players
@@ -569,6 +759,10 @@ class __$$GameStateImplCopyWithImpl<$Res>
           ? _value.winnerFaction
           : winnerFaction // ignore: cast_nullable_to_non_nullable
               as String?,
+      log: null == log
+          ? _value._log
+          : log // ignore: cast_nullable_to_non_nullable
+              as List<GameEvent>,
     ));
   }
 }
@@ -586,10 +780,12 @@ class _$GameStateImpl implements _GameState {
       this.pendingNightKill,
       this.revealOnDeath = false,
       this.isRunning = false,
-      this.winnerFaction})
+      this.winnerFaction,
+      final List<GameEvent> log = const <GameEvent>[]})
       : _players = players,
         _nominations = nominations,
-        _votes = votes;
+        _votes = votes,
+        _log = log;
 
   factory _$GameStateImpl.fromJson(Map<String, dynamic> json) =>
       _$$GameStateImplFromJson(json);
@@ -612,9 +808,7 @@ class _$GameStateImpl implements _GameState {
   @override
   @JsonKey()
   final int secondsLeft;
-// timer for current phase
   final List<String> _nominations;
-// timer for current phase
   @override
   @JsonKey()
   List<String> get nominations {
@@ -623,9 +817,7 @@ class _$GameStateImpl implements _GameState {
     return EqualUnmodifiableListView(_nominations);
   }
 
-// names
   final List<VoteEntry> _votes;
-// names
   @override
   @JsonKey()
   List<VoteEntry> get votes {
@@ -636,20 +828,26 @@ class _$GameStateImpl implements _GameState {
 
   @override
   final String? pendingNightKill;
-// selected target name
   @override
   @JsonKey()
   final bool revealOnDeath;
   @override
   @JsonKey()
   final bool isRunning;
-// timer running
   @override
   final String? winnerFaction;
+  final List<GameEvent> _log;
+  @override
+  @JsonKey()
+  List<GameEvent> get log {
+    if (_log is EqualUnmodifiableListView) return _log;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_log);
+  }
 
   @override
   String toString() {
-    return 'GameState(players: $players, phase: $phase, cycle: $cycle, secondsLeft: $secondsLeft, nominations: $nominations, votes: $votes, pendingNightKill: $pendingNightKill, revealOnDeath: $revealOnDeath, isRunning: $isRunning, winnerFaction: $winnerFaction)';
+    return 'GameState(players: $players, phase: $phase, cycle: $cycle, secondsLeft: $secondsLeft, nominations: $nominations, votes: $votes, pendingNightKill: $pendingNightKill, revealOnDeath: $revealOnDeath, isRunning: $isRunning, winnerFaction: $winnerFaction, log: $log)';
   }
 
   @override
@@ -672,7 +870,8 @@ class _$GameStateImpl implements _GameState {
             (identical(other.isRunning, isRunning) ||
                 other.isRunning == isRunning) &&
             (identical(other.winnerFaction, winnerFaction) ||
-                other.winnerFaction == winnerFaction));
+                other.winnerFaction == winnerFaction) &&
+            const DeepCollectionEquality().equals(other._log, _log));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -688,7 +887,8 @@ class _$GameStateImpl implements _GameState {
       pendingNightKill,
       revealOnDeath,
       isRunning,
-      winnerFaction);
+      winnerFaction,
+      const DeepCollectionEquality().hash(_log));
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.
@@ -717,7 +917,8 @@ abstract class _GameState implements GameState {
       final String? pendingNightKill,
       final bool revealOnDeath,
       final bool isRunning,
-      final String? winnerFaction}) = _$GameStateImpl;
+      final String? winnerFaction,
+      final List<GameEvent> log}) = _$GameStateImpl;
 
   factory _GameState.fromJson(Map<String, dynamic> json) =
       _$GameStateImpl.fromJson;
@@ -729,19 +930,21 @@ abstract class _GameState implements GameState {
   @override
   int get cycle;
   @override
-  int get secondsLeft; // timer for current phase
+  int get secondsLeft;
   @override
-  List<String> get nominations; // names
+  List<String> get nominations;
   @override
   List<VoteEntry> get votes;
   @override
-  String? get pendingNightKill; // selected target name
+  String? get pendingNightKill;
   @override
   bool get revealOnDeath;
   @override
-  bool get isRunning; // timer running
+  bool get isRunning;
   @override
   String? get winnerFaction;
+  @override
+  List<GameEvent> get log;
 
   /// Create a copy of GameState
   /// with the given fields replaced by the non-null parameter values.

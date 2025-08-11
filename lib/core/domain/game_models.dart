@@ -8,7 +8,7 @@ part 'game_models.g.dart';
 class Player with _$Player {
   const factory Player({
     required String name,
-    required String roleId, // secret to players; visible to GM
+    required String roleId,
     @Default(true) bool alive,
   }) = _Player;
 
@@ -18,11 +18,22 @@ class Player with _$Player {
 @freezed
 class VoteEntry with _$VoteEntry {
   const factory VoteEntry({
-    required String voter, // player name
-    required String target, // player name
+    required String voter,
+    required String target,
   }) = _VoteEntry;
 
   factory VoteEntry.fromJson(Map<String, dynamic> json) => _$VoteEntryFromJson(json);
+}
+
+@freezed
+class GameEvent with _$GameEvent {
+  const factory GameEvent({
+    required DateTime at,
+    required String type,   // e.g., 'night_kill', 'nominate', 'vote', 'exec', 'phase'
+    required String text,   // human-readable
+  }) = _GameEvent;
+
+  factory GameEvent.fromJson(Map<String, dynamic> json) => _$GameEventFromJson(json);
 }
 
 @freezed
@@ -31,13 +42,14 @@ class GameState with _$GameState {
     @Default([]) List<Player> players,
     @Default(PhaseType.night) PhaseType phase,
     @Default(1) int cycle,
-    @Default(120) int secondsLeft, // timer for current phase
-    @Default(<String>[]) List<String> nominations, // names
+    @Default(120) int secondsLeft,
+    @Default(<String>[]) List<String> nominations,
     @Default(<VoteEntry>[]) List<VoteEntry> votes,
-    String? pendingNightKill, // selected target name
+    String? pendingNightKill,
     @Default(false) bool revealOnDeath,
-    @Default(false) bool isRunning, // timer running
-    String? winnerFaction, // Town / Mafia / Independent
+    @Default(false) bool isRunning,
+    String? winnerFaction,
+    @Default(<GameEvent>[]) List<GameEvent> log,   // NEW: timeline log
   }) = _GameState;
 
   factory GameState.fromJson(Map<String, dynamic> json) => _$GameStateFromJson(json);

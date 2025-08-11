@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mafia_godmode/core/application/gm_controller.dart';
 import 'package:mafia_godmode/core/domain/game_models.dart';
-import 'package:mafia_godmode/core/domain/gm_controller.dart';
 import 'package:mafia_godmode/core/domain/phase.dart';
 
 class GmPanelScreen extends ConsumerWidget {

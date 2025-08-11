@@ -17,15 +17,19 @@ class GameController extends StateNotifier<GameState> {
   final Ref ref;
   Timer? _ticker;
 
-  // Config defaults (could come from Ruleset later)
   static const nightSeconds = 60;
   static const daySeconds = 180;
   static const voteSeconds = 60;
   static const execSeconds = 20;
 
+  void _log(String type, String text) {
+    final ev = GameEvent(at: DateTime.now(), type: type, text: text);
+    state = state.copyWith(log: [...state.log, ev]);
+  }
+
   void startFromAssignments() {
     final names = ref.read(playerNamesProvider);
-    final assignments = ref.read(assignmentsProvider); // name -> Role
+    final assignments = ref.read(assignmentsProvider);
     if (names.isEmpty || assignments.isEmpty) return;
 
     final players = <Player>[];
@@ -46,15 +50,18 @@ class GameController extends StateNotifier<GameState> {
       pendingNightKill: null,
       winnerFaction: null,
       isRunning: false,
+      log: const [],
     );
+    _log('phase', 'Game started • Night 1');
   }
 
-  // Timer controls
   void toggleTimer() {
     if (state.isRunning) {
       _stopTicker();
+      _log('timer', 'Paused at ${state.phase.label} (${state.secondsLeft}s)');
     } else {
       _startTicker();
+      _log('timer', 'Started ${state.phase.label} (${state.secondsLeft}s)');
     }
     state = state.copyWith(isRunning: !state.isRunning);
   }
@@ -68,6 +75,7 @@ class GameController extends StateNotifier<GameState> {
       PhaseType.end => 0,
     };
     state = state.copyWith(secondsLeft: sec);
+    _log('timer', 'Reset ${state.phase.label} timer');
   }
 
   void _startTicker() {
@@ -88,16 +96,18 @@ class GameController extends StateNotifier<GameState> {
   void _autoAdvanceOnTimeout() {
     _stopTicker();
     state = state.copyWith(isRunning: false);
+    _log('timer', 'Auto-advance on timeout');
     nextPhase();
   }
 
-  // Phase transitions
   void nextPhase() {
     switch (state.phase) {
       case PhaseType.night:
-      // Apply pending night kill
         if (state.pendingNightKill != null) {
           _kill(state.pendingNightKill!);
+          _log('night_kill', 'Killed ${state.pendingNightKill}');
+        } else {
+          _log('night', 'No kill selected');
         }
         state = state.copyWith(
           phase: PhaseType.day,
@@ -105,6 +115,7 @@ class GameController extends StateNotifier<GameState> {
           isRunning: false,
           pendingNightKill: null,
         );
+        _log('phase', 'Day ${state.cycle}');
         break;
       case PhaseType.day:
         state = state.copyWith(
@@ -114,6 +125,7 @@ class GameController extends StateNotifier<GameState> {
           nominations: const [],
           votes: const [],
         );
+        _log('phase', 'Voting ${state.cycle}');
         break;
       case PhaseType.vote:
         state = state.copyWith(
@@ -121,12 +133,13 @@ class GameController extends StateNotifier<GameState> {
           secondsLeft: execSeconds,
           isRunning: false,
         );
+        _log('phase', 'Execution ${state.cycle}');
         break;
       case PhaseType.exec:
-      // After execution, check win and/or proceed to next night
         final winner = _checkWin();
         if (winner != null) {
           state = state.copyWith(phase: PhaseType.end, winnerFaction: winner, secondsLeft: 0);
+          _log('win', 'Winner: $winner');
         } else {
           state = state.copyWith(
             phase: PhaseType.night,
@@ -134,16 +147,18 @@ class GameController extends StateNotifier<GameState> {
             isRunning: false,
             cycle: state.cycle + 1,
           );
+          _log('phase', 'Night ${state.cycle}');
         }
         break;
       case PhaseType.end:
+        _log('phase', 'Game over');
         break;
     }
   }
 
-  // Night actions (MVP: one mafia kill)
   void selectNightKill(String? targetName) {
     state = state.copyWith(pendingNightKill: targetName);
+    _log('select', targetName == null ? 'Night kill cleared' : 'Night kill → $targetName');
   }
 
   void _kill(String name) {
@@ -154,21 +169,22 @@ class GameController extends StateNotifier<GameState> {
     state = state.copyWith(players: updated);
   }
 
-  // Nominations & Votes
   void nominate(String name) {
     if (!state.players.any((p) => p.name == name && p.alive)) return;
     if (state.nominations.contains(name)) return;
     state = state.copyWith(nominations: [...state.nominations, name]);
+    _log('nominate', name);
   }
 
   void removeNomination(String name) {
     state = state.copyWith(nominations: state.nominations.where((n) => n != name).toList());
+    _log('nominate_remove', name);
   }
 
   void castVote({required String voter, required String target}) {
-    if (!_isAlive(voter) || !_isAlive(target)) return;
     final others = state.votes.where((v) => v.voter != voter).toList();
     state = state.copyWith(votes: [...others, VoteEntry(voter: voter, target: target)]);
+    _log('vote', '$voter → $target');
   }
 
   String? topVotedTarget() {
@@ -188,11 +204,10 @@ class GameController extends StateNotifier<GameState> {
     final target = topVotedTarget();
     if (target != null) {
       _kill(target);
-      // Optional: reveal check here; state.revealOnDeath
+      _log('exec', 'Executed $target');
     }
   }
 
-  // Helpers
   bool _isAlive(String name) => state.players.any((p) => p.name == name && p.alive);
 
   String? _checkWin() {
@@ -208,17 +223,16 @@ class GameController extends StateNotifier<GameState> {
     }
     if (mafiaAlive == 0 && indyAlive == 0 && townAlive > 0) return 'Town';
     if (mafiaAlive > 0 && mafiaAlive >= townAlive) return 'Mafia';
-    // Simple indy rule: if only indy survives with others, refine later
     if (indyAlive > 0 && mafiaAlive == 0 && townAlive == 0) return 'Independent';
     return null;
   }
 
-  // Manual overrides
   void toggleAlive(String name) {
     final idx = state.players.indexWhere((p) => p.name == name);
     if (idx == -1) return;
     final updated = [...state.players];
     updated[idx] = updated[idx].copyWith(alive: !updated[idx].alive);
     state = state.copyWith(players: updated);
+    _log('toggle_alive', '$name → ${updated[idx].alive ? 'alive' : 'dead'}');
   }
 }
