@@ -229,4 +229,10 @@ class GameController extends StateNotifier<GameState> {
     state = state.copyWith(players: updated);
     _log('toggle_alive', '$name → ${newAlive ? 'alive' : 'dead'}');
   }
+
+  // Add this helper to allow persistence to override the state:
+  void overrideState(GameState newState) {
+    _stopTicker();
+    state = newState.copyWith(isRunning: false); // safety: don't auto-run timer on load
+  }
 }

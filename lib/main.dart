@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mafia_godmode/app/theme/app_theme.dart';
 import 'package:mafia_godmode/features/assignment/assignment_screen.dart';
 import 'package:mafia_godmode/features/catalog/catalog_screen.dart';
@@ -10,8 +11,9 @@ import 'package:mafia_godmode/features/setup/setup_screen.dart';
 import 'package:mafia_godmode/features/shell/shell_screen.dart';
 import 'package:mafia_godmode/features/summary/summary_screen.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
   runApp(const ProviderScope(child: MafiaApp()));
 }
 

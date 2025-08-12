@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mafia_godmode/core/infrastructure/persistence_binder.dart';
 
 class ShellScreen extends StatelessWidget {
   const ShellScreen({required this.child, super.key});
@@ -9,7 +10,7 @@ class ShellScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Mafia God Mode')),
-      body: child,
+      body: PersistenceBinder(child: child),
       bottomNavigationBar: NavigationBar(
         destinations: const [
           NavigationDestination(icon: Icon(Icons.tune), label: 'Setup'),
